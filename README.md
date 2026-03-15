@@ -165,21 +165,6 @@ DeviceProcessEvents
 | where DeviceName has 'ch-'      
 
 
-**Evidence:**
-
-
-The initial query showed suspicious files that were downloaded with the keywords in the alert. The affected device was identified as `ch-ops-wks02`.
-
-
-
-
-
-
-
-
-
-
-
 
 ### 🚩 Flag 1: Initial Execution Detection
 
@@ -203,12 +188,6 @@ DeviceProcessEvents
     | where ProcessCommandLine has_any (".ps1")
     | project ProcessCommandLine, SHA256, DeviceName, DeviceId, FileName, Timestamp 
     | order by Timestamp desc
-
-
-**Evidence:**
-<img width="1699" height="220" alt="image" src= xx/>
-
-
 
 
 
@@ -238,14 +217,6 @@ The detection strategy focuses on determining when the identified maintenance sc
 
 
 
-**Evidence:**
-<img width="2083" height="492" alt="image" src= xx />
-
-
-
-
-
-
 ### 🚩 Flag 3: Identify the Beacon Destination
 
 **Objective:**
@@ -263,10 +234,6 @@ DeviceNetworkEvents
 | where DeviceName has "CH-OPS-WKS02"
 | where InitiatingProcessCommandLine has "MaintenanceRunner_Distributed"
 | project TimeGenerated, DeviceId, DeviceName, ActionType, RemoteIP, RemotePort
-
-
-**Evidence:**
-<img width="1217" height="218" alt="image" src= />
 
 
 
@@ -288,12 +255,6 @@ DeviceNetworkEvents
 | where InitiatingProcessCommandLine has "MaintenanceRunner_Distributed"
 | where RemoteIP has "127.0.0.1"
 | project TimeGenerated, DeviceId, DeviceName, ActionType, RemoteIP, RemotePort 
-
-
-```
-**Evidence:**
-<img width="1266" height="251" alt="image" src= />
-
 
 
 
@@ -319,12 +280,6 @@ DeviceFileEvents
 | order by TimeGenerated asc
 
 
-```
-
-**Evidence:**
-<img width="1378" height="279" alt="image" src= xx  />
-
-
 
 ### 🚩 Flag 6: Confirm the Staged File’s Integrity
 
@@ -347,9 +302,6 @@ DeviceFileEvents
 | project TimeGenerated, ActionType, FolderPath, FileName, InitiatingProcessCommandLine, SHA256
 | order by TimeGenerated asc  
 
-
-**Evidence:**
-<img width="1858" height="321" alt="image" src= xx />
 
 
 
@@ -379,10 +331,6 @@ DeviceFileEvents
 
 
 
-**Evidence:**
-<img width="2104" height="348" alt="image" src= >
-
-
 ### 🚩 Flag 8: Suspicious Registry Activity
 
 **Objective:**
@@ -408,9 +356,6 @@ DeviceRegistryEvents
           InitiatingProcessFileName, InitiatingProcessCommandLine 
 
 
-
-**Evidence:**
-<img width="2101" height="356" alt="image" src= xx/>
 
 
 
@@ -441,11 +386,6 @@ DeviceRegistryEvents
           InitiatingProcessFileName, InitiatingProcessCommandLine
 
 
-
-**Evidence:**
-<img width="2088" height="362" alt="image" src=" />
-
-
 ### 🚩 Flag 10: Registry-based Persistence
 
 **Objective:**
@@ -467,9 +407,6 @@ DeviceRegistryEvents
 
 
 
-**Evidence:**
-<img width="2080" height="212" alt="image" src= xx />
-
 
 
 ### 🚩 Flag 11: Privilege Escalation Event Timestamp
@@ -489,13 +426,6 @@ DeviceEvents
 | where DeviceName has "CH-OPS-WKS02"
 | where AdditionalFields  has ( "ConfigAdjust")
 | project TimeGenerated, ActionType, InitiatingProcessCommandLine
-
-**Evidence:**
-<img width="1348" height="314" alt="image" src= />
-
-
-
-
 
 
 
@@ -517,9 +447,6 @@ DeviceProcessEvents
 | where ProcessCommandLine has "-ExclusionPath"
 | project Timestamp, ProcessCommandLine
 | order by Timestamp as
-
-**Evidence:**
-<img width="2082" height="586" alt="image" src= xx />
 
 
 
@@ -547,8 +474,7 @@ DeviceProcessEvents
 | take 50
 
 
-**Evidence:**
-<img width="2082" height="587" alt="image" src= />
+
 
 
 
@@ -570,11 +496,6 @@ DeviceEvents
 | where ActionType has "ProcessPrimaryTokenModified" 
 | project TimeGenerated, InitiatingProcessId, ActionType, AdditionalFields
 | order by TimeGenerated asc
-
-
-**Evidence:**
-<img width="1840" height="214" alt="image" src=  />
-
 
 
 
@@ -610,8 +531,7 @@ DeviceEvents
 | project Timestamp, InitiatingProcessId, OriginalTokenUserSid, CurrentTokenUserSid, AdditionalFields
 | order by Timestamp asc
 
-**Evidence:**
-<img width="1524" height="313" alt="image" src= />
+
 
 ### 🚩 Flag 16 Ingress Tool Transfer from External Dynamic Tunnel
  
@@ -788,10 +708,6 @@ Which internal IP address (non–100.64.x.x) appears as part of the attacker’s
 10.168.0.7 
 
 
-
-
-
-
 **Detection strategy** 
 The detection strategy focuses on identifying a potential **internal pivot point used by the attacker within the Azure environment** during the intrusion on **CH-OPS-WKS02**. Analysts should review the **remote session metadata** attached to suspicious events and examine the IP addresses associated with those sessions. Because attackers often move laterally through compromised systems, investigators should differentiate between **external session addresses and internal virtual network addresses**. By filtering for IPs that belong to the **internal Azure virtual network range (excluding 100.64.x.x addresses)**, analysts can identify the internal system likely used as a hop or staging point before accessing CH-OPS-WKS02. Determining this internal IP helps reconstruct the attacker’s path through the environment and may reveal additional compromised systems involved in the intrusion.
 
@@ -885,10 +801,6 @@ According to Defender geolocation enrichment, what country or region do the atta
 
 **Flag Value** 
 Vietnam  
-
-
-
-
 
 
 **Detection Strategy** 
@@ -985,9 +897,6 @@ Ops.maintenance
 
 
 
-
-
-
 ** Detection Strategy** 
 
 The detection strategy focuses on identifying the **next user account accessed by the attacker after completing initial reconnaissance on CH-OPS-WKS02**. Analysts should review authentication and logon telemetry occurring immediately after the enumeration activity and correlate these events with the attacker’s session metadata. By filtering for new logon events or account interactions during this timeframe, investigators can determine whether the adversary attempted to **test stolen credentials, access another user profile, or pivot to a higher-privileged account**. Identifying the account involved in this transition helps defenders understand the attacker’s intent, trace potential privilege escalation attempts, and map how the adversary began interacting with additional user accounts during the intrusion.
@@ -999,25 +908,6 @@ DeviceLogonEvents
 | where TimeGenerated > datetime(2025-11-23T03:08:00Z)   // <- your anchor time
 | order by TimeGenerated asc
 | project AccountName,TimeGenerated,InitiatingProcessCommandLine
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
