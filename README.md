@@ -2,7 +2,7 @@
 This is a threat hunt project using tools such as Azure, KQL , etc 
 # 📚 Table of Contents
 
-- [Threat Hunt: "Remote Assistance"](#%EF%B8%8F%E2%80%8D%EF%B8%8F-threat-hunt-remote-assistance)
+- [Threat Hunt: "CorpHealth-Traceback"](#%EF%B8%8F%E2%80%8D%EF%B8%8F-threat-hunt-remote-assistance)
 - [Platforms and Tools](#-platforms-and-tools)
 - [Summary of Findings (Flags)](#-summary-of-findings-flags)
   [ Flags]  0-31 
@@ -13,7 +13,7 @@ This is a threat hunt project using tools such as Azure, KQL , etc
 
 ---
 
-# 🕵️‍♂️ Threat Hunt: *"Remote Assistance"*
+# 🕵️‍♂️ Threat Hunt: *"CorpHealth-Traceback"*
 
 ## Scenario
 
