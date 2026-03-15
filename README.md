@@ -166,7 +166,7 @@ DeviceProcessEvents
 
 
 **Evidence:**
-![CorpHealth Hunt Screenshot](https://github.com/cyberdotkom/assets-for-github-/raw/main/screenshot%20for%20hunt%20corpshealth.png)
+
 
 The initial query showed suspicious files that were downloaded with the keywords in the alert. The affected device was identified as `ch-ops-wks02`.
 
